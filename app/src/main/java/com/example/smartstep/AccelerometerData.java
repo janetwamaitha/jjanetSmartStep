@@ -2,13 +2,17 @@ package com.example.smartstep;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class AccelerometerData extends AppCompatActivity implements SensorEventListener {
@@ -19,12 +23,14 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
     private SensorEvent event;
     private Sensor sensor;
     TextView xValue, yValue, zValue, pressure;
+    private Button button;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accelerometer_data);
+
 
         xValue = (TextView) findViewById(R.id.xValue);
         yValue = (TextView) findViewById(R.id.yValue);
@@ -53,11 +59,19 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
         } else {
             pressure.setText("Pressure not supported");
         }
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivityLocation();
 
+            }
+        });
+    }
 
-
-
-
+    public void openActivityLocation() {
+        Intent intent = new Intent(this, Location.class);
+        startActivity(intent);
     }
 
     @Override
@@ -84,10 +98,6 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
         }
 
 
-
-    }
-    public void startMotionDna() {
-        String devKey = "bi1kSrZFBJ4tsM91mwmhfUUTIBLKZHyvLdUB3k82zqWRffVV7FEGO03rtsMdD36w";
     }
 
 }
