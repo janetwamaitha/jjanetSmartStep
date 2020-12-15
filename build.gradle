@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext.mapwize_sdk_version = '3.4.5'
+    ext.local_sdk = false
     repositories {
         google()
         jcenter()
@@ -16,6 +18,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.mapwize.io"}
     }
 }
 

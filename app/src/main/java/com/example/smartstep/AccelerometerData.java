@@ -1,8 +1,5 @@
 package com.example.smartstep;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -15,14 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class AccelerometerData extends AppCompatActivity implements SensorEventListener {
     private static final String TAG = "AccelerometerData";
 
     private SensorManager sensorManager;
-    private Sensor accelerometer, mPressure;
+    private Sensor accelerometer,mGyro, mPressure;
     private SensorEvent event;
     private Sensor sensor;
-    TextView xValue, yValue, zValue, pressure;
+    TextView xValue, yValue, zValue, xGyroValue, yGyroValue, zGyroValue, pressure;
     private Button button;
 
 
@@ -36,6 +35,11 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
         yValue = (TextView) findViewById(R.id.yValue);
         zValue = (TextView) findViewById(R.id.zValue);
         pressure = (TextView) findViewById(R.id.pressure);
+
+        xGyroValue = (TextView) findViewById(R.id.xGyroValue);
+        yGyroValue = (TextView) findViewById(R.id.yGyroValue);
+        zGyroValue = (TextView) findViewById(R.id.zGyroValue);
+
 
         Log.d(TAG, "onCreate: Initializing Sensor Services");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -51,6 +55,19 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
             xValue.setText("Accelerometer not supported");
             yValue.setText("Accelerometer not supported");
             zValue.setText("Accelerometer not supported");
+        }
+
+        mGyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+
+        if (mGyro != null) {
+            sensorManager.registerListener(AccelerometerData.this, mGyro, SensorManager.SENSOR_DELAY_NORMAL);
+            Log.d(TAG, "onCreate: Registered Gyro Listener");
+
+        } else {
+            xGyroValue.setText("Gyro not supported");
+            yGyroValue.setText("Gyro not supported");
+            zGyroValue.setText("Gyro not supported");
         }
         mPressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         if (mPressure != null) {
@@ -93,7 +110,12 @@ public class AccelerometerData extends AppCompatActivity implements SensorEventL
             xValue.setText("xValue: " + event.values[0]);
             yValue.setText("yValue: " + event.values[1]);
             zValue.setText("zValue: " + event.values[2]);
-        } else if (sensor.getType() == Sensor.TYPE_PRESSURE) {
+        }else if(sensor.getType() == Sensor.TYPE_GYROSCOPE){
+            xGyroValue.setText("xValue: " + event.values[0]);
+            yGyroValue.setText("yValue: " + event.values[1]);
+            zGyroValue.setText("zValue: " + event.values[2]);
+        }
+        else if (sensor.getType() == Sensor.TYPE_PRESSURE) {
             pressure.setText("pressure: " + event.values[0]);
         }
 
